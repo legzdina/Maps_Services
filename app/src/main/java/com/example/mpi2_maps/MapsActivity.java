@@ -1,6 +1,8 @@
 package com.example.mpi2_maps;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -9,7 +11,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
@@ -24,8 +32,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import android.support.v7.app.AppCompatActivity;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -36,11 +46,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location lastLocation;
     private Marker currentUserLocationMarker;
     private  static final int Request_User_Location_Code = 99;
+    private android.support.v7.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkUserLocationPermission();
@@ -53,7 +67,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -63,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     @Override
     public void onMapReady(GoogleMap googleMap) { //when map is ready to use
         mMap = googleMap;
@@ -74,7 +88,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
 
         }
-
     }
 
     public boolean checkUserLocationPermission(){
@@ -136,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("user Current Location");
+        markerOptions.title("User Current Location");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         currentUserLocationMarker = mMap.addMarker(markerOptions);
 
@@ -148,9 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(googleApiClient != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         }
-
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -162,7 +173,6 @@ locationRequest.setFastestInterval(1100); //tik milisec
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
-
     }
 
     @Override
@@ -174,5 +184,23 @@ locationRequest.setFastestInterval(1100); //tik milisec
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.appbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_github) {
+
+            startActivity(new Intent(this, GithubRepo.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
 
