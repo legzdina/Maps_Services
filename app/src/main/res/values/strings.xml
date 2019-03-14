@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MPI2_MAPS</string>
+    <string name="app_name">Github API</string>
     <string name="title_activity_maps">Map</string>
     <string name="txt_activity">Github</string>
     <string name="username">Lietotājs: </string>

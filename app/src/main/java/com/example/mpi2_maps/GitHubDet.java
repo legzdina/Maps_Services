@@ -80,7 +80,6 @@ public class GitHubDet implements Parcelable {
         public void setLogin(String login) {
             this.login = login;
         }
-
     }
 }
 
