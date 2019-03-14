@@ -33,12 +33,13 @@ public class GitHubRepoAdapter extends ArrayAdapter {
             view = inflater.inflate(R.layout.list_item,null);
         }
         TextView name = (TextView)view.findViewById(R.id.repoName);
-//TE
+        TextView login = (TextView)view.findViewById(R.id.repoUser);
+
         GitHubDet gitHubDet = list.get(position);
         if(name != null)
         {
             name.setText(gitHubDet.getName());
-//TE
+            login.setText(gitHubDet.getOwner().getLogin());
 
         }
 
